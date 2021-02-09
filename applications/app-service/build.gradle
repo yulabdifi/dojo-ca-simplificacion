@@ -1,0 +1,21 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-undertow', version: '2.3.8.RELEASE'
+	implementation project(':api-rest')
+	implementation project(':rest-client')
+    implementation project(':model')
+    implementation project(':usecase')
+    compile 'org.springframework.boot:spring-boot-starter'
+    compile 'org.reactivecommons.utils:object-mapper:0.1.0'
+    runtime('org.springframework.boot:spring-boot-devtools')
+}
+
+task explodedJar(type: Copy) {
+    with jar
+    into "${buildDir}/exploded"
+}
+
+configurations{
+	compile.exclude group: "org.springframework.boot", module:"spring-boot-starter-tomcat"
+}
