@@ -30,8 +30,8 @@ public class BalancesAdapter implements BalancesGateway {
 		RetrieveBalanceRequest request = RetrieveBalanceRequest.builder().data(data).build();
 
 		return WebClient.create(url).post().contentType(MediaType.APPLICATION_JSON)
-				.body(request, RetrieveBalanceRequest.class).retrieve().bodyToMono(RetrieveBalanceResponse.class)
-				.map(r -> r.getData().get(0).getAccount().getBalances());
+				.body(Mono.just(request), RetrieveBalanceRequest.class).retrieve().bodyToMono(RetrieveBalanceResponse.class)
+				.flatMapIterable(RetrieveBalanceResponse::getData).next().getAccount().getBalances());
 
 	}
 }
