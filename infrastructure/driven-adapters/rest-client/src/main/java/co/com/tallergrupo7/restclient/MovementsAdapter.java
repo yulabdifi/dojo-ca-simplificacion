@@ -45,8 +45,8 @@ public class MovementsAdapter implements MovementsGateway {
 		RetrieveTransactionRequest request = RetrieveTransactionRequest.builder().data(datals).build();
 
 		return WebClient.create(url).post().header(HEADER_TRANSACTION_TRACKER, UUID.randomUUID().toString())
-				.contentType(MediaType.APPLICATION_JSON).body(request, RetrieveTransactionRequest.class).retrieve()
-				.bodyToMono(RetrieveTransactionResponse.class).map(r -> r.getData().get(0).getTransaction());
+				.contentType(MediaType.APPLICATION_JSON).body(Mono.just(request), RetrieveTransactionRequest.class).retrieve()
+				.bodyToMono(RetrieveTransactionResponse.class).flatMapIterable(RetrieveTransactionResponse::getData).next().getTransaction());
 
 	}
 }
